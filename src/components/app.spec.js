@@ -6,7 +6,7 @@ const KEYS = Object.keys(DEFAULTS);
 
 describe("<App /", () => {
   describe("fetchConfig", () => {
-    let config = fs.readFileSync('data/config.dat', 'utf-8');
+    let config = {};
 
     describe("config exists", () => {
       let _subject = null;

@@ -11,7 +11,7 @@ export const DEFAULTS = {
   staticGateway: '',
   staticSubnet: '',
 }
-const STRINGS = Object.keys(DEFAULTS).slice(8);
+const STRINGS = Object.keys(DEFAULTS).slice(2);
 
 function deserializeString(buffer, offset) {
   let len = buffer[offset];

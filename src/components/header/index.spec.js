@@ -13,8 +13,8 @@ describe("<Header>", () => {
     });
 
     describe("h1", () => {
-      it("text is Configure your Wifi Switch", () => {
-        expect(renderEl().querySelector("h1").textContent).to.eq("Configure your Wifi Switch");
+      it("text is Configure Hugo’s Light", () => {
+        expect(renderEl().querySelector("h1").textContent).to.eq("Configure Hugo’s Light");
       });
     });
   });

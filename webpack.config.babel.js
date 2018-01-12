@@ -119,14 +119,19 @@ module.exports = {
 		setup(app) {
       app.use(fileUpload());
 			app.get("/config.dat", function(req, res) {
+        // TODO: Need convert the config to a hex string
 				fs.readFile('data/config.dat', 'utf-8', function(error, data) {
-					res.writeHead(200, { 'Content-type': 'application/octet-stream' });
-					res.end(data, 'binary');
+					if(error) {
+            res.status(404).send("Not Found");
+          } else {
+            res.writeHead(200, { 'Content-type': 'text/plain' });
+					  res.end(data, 'binary');
+          }
 				});
 			});
 
 			app.post("/config.dat", function(req, res) {
-
+        
 			});
 
 			app.get("/aps.json", function(req, res) {
