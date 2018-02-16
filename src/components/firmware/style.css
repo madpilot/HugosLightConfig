@@ -1,7 +1,0 @@
-.panel {
-  composes: panel from '../../modules/panel.css';
-}
-
-.heading {
-  composes: heading from '../../modules/panel.css';
-}

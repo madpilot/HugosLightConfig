@@ -1,13 +1,13 @@
 import { h, Component } from 'preact';
 
 import Header from './header';
-import Tab from './tab';
-import Firmware from './firmware';
-import WifiPanel from './wifi-panel';
-import NetworkPanel from './network-panel';
-import Button from './button';
+import Tab from 'configduino/components/tab';
+import Firmware from 'configduino/components/firmware';
+import WifiPanel from 'configduino/components/wifi-panel';
+import NetworkPanel from 'configduino/components/network-panel';
+import Button from 'configduino/components/button';
 
-import Form from '../validation/form';
+import Form from 'configduino/validation/form';
 import { cleanProps } from '../lib/utilities/index.js';
 
 import { encode, decode, DEFAULTS as CONFIG_DEFAULTS } from '../lib/config';
@@ -48,10 +48,10 @@ export default class App extends Component {
 
   saveConfig(e) {
     e.preventDefault();
-    
+
     let formData = new FormData();
-    formData.append("config.dat", encode(this.state)); 
-    
+    formData.append("config.dat", encode(this.state));
+
     let files = e.target.querySelectorAll("input[type=\"file\"]")
     for(let i = 0; i < files.length; i++) {
       let el = files[i];
@@ -60,7 +60,7 @@ export default class App extends Component {
         formData.append(filename, el.files[0]);
       }
     }
-    
+
     let xhr = new XMLHttpRequest();
     xhr.open("post", "/config.dat");
     xhr.send(formData);

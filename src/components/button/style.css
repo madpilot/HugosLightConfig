@@ -1,7 +1,0 @@
-.container {
-	composes: button-wrapper from '../../modules/form.css';
-}
-
-.button {
-	composes: button from '../../modules/form.css';
-}
