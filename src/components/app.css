@@ -1,4 +1,4 @@
-@value line-height, small, smallest, darker, lighter, lighter-highlight, lightest from '../modules/variables.css';
+@value line-height, small, smallest, darker, lighter, lighter-highlight, lightest from 'configduino/modules/variables.css';
 
 html, body, div, span, h1, form, label, section, p, input, a, nav, ul, li {
   margin: 0;
@@ -43,7 +43,7 @@ body {
 }
 
 .form {
-  composes: form from '../modules/form.css';
+  composes: form from 'configduino/modules/form.css';
 }
 
 .tabs {
@@ -54,7 +54,7 @@ body {
 }
 
 .tab {
-  composes: link from '../modules/link.css';
+  composes: link from 'configduino/modules/link.css';
   display: block;
   padding: 0.5rem 1rem;
   text-decoration: none;
