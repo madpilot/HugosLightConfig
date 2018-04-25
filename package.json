@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --progress",
     "build": "NODE_ENV=production webpack -p --progress",
+    "package": "gzip < build/index.html > config.html.gz && xxd -i config.html.gz build/config.html.h && rm config.html.gz",
     "test": "jest --coverage",
     "test:watch": "yarn run -s test -- --watch"
   },
@@ -43,7 +44,7 @@
     "babel-register": "^6.24.1",
     "babel-runtime": "^6.23.0",
     "chai": "^3.5.0",
-    "configduino": "^1.0.0",
+    "configduino": "^1.0.1",
     "core-js": "^2.4.1",
     "cross-env": "^4.0.0",
     "css-loader": "^0.28.0",

@@ -1,6 +1,8 @@
 import { h, Component } from 'preact';
 
 import Header from './header';
+import Overlay from './overlay';
+import { NOT_SAVING, SAVING, RESETTING, SAVED } from './overlay';
 import Tab from 'configduino/components/tab';
 import Firmware from 'configduino/components/firmware';
 import WifiPanel from 'configduino/components/wifi-panel';
@@ -24,10 +26,20 @@ export default class App extends Component {
     this.state = Object.assign({}, CONFIG_DEFAULTS, {
       scan: true,
       tab: TAB_SETTINGS,
-      loaded: false
+      loaded: false,
+      uploading: NOT_SAVING
     });
 
     this.fetchConfig();
+  }
+
+  ping() {
+    return window.fetch("/config/ping").then((response) => {
+      if(!response.ok) {
+        throw Error();
+      }
+      return response.text();
+    });
   }
 
   fetchConfig() {
@@ -46,6 +58,24 @@ export default class App extends Component {
     });
   }
 
+  waitForReset(e) {
+    // Uploading firmware will result in the device resetting, which will actually just kill the connection
+    // so there will never be a success. On a connection event, start pinging - once the server is back up, we can re-request
+    // the config file, and start again.
+    this.setState({ uploading: RESETTING });
+    this.ping().then(() => {
+      this.setState({ uploading: SAVED });
+      this.fetchConfig();
+      setTimeout(() => {
+        this.setState({ uploading: NOT_SAVING }, 1000);
+      });
+    }).catch(() => {
+      setTimeout(() => {
+        this.waitForReset(e);
+      }, 1000);
+    });
+  }
+
   saveConfig(e) {
     e.preventDefault();
 
@@ -60,16 +90,21 @@ export default class App extends Component {
         formData.append(filename, el.files[0]);
       }
     }
-
+    
+    this.setState({ uploading: SAVING });
     let xhr = new XMLHttpRequest();
+    xhr.addEventListener("error", this.waitForReset.bind(this));
     xhr.open("post", "/config/update");
     xhr.send(formData);
   }
 
   uploadFirmware(e) {
     e.preventDefault();
+    
+    this.setState({ uploading: SAVING });
 
     let xhr = new XMLHttpRequest();
+    xhr.addEventListener("error", this.waitForReset.bind(this));
     xhr.open("post", "/firmware");
     xhr.send(new FormData(e.target));
   }
@@ -93,6 +128,7 @@ export default class App extends Component {
     return (
       <div id="app" className={styles.container}>
         <Header />
+        <Overlay uploading={this.state.uploading} />
 
         <nav>
           <ul className={styles.tabs}>

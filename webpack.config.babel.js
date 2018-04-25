@@ -117,8 +117,21 @@ module.exports = {
 		historyApiFallback: true,
 		open: true,
 		setup(app) {
+      var delayPing = false;
+
       app.use(fileUpload());
-			app.get("/config.dat", function(req, res) {
+			app.get("/config/ping", function(req, res) {
+        if(delayPing) {
+          setTimeout(function() {
+            delayPing = false;
+          }, 5000);
+        } else {
+          res.writeHead(200, { 'Content-type': 'text/plain' });
+          res.end("pong");
+        }
+      });
+
+      app.get("/config.dat", function(req, res) {
         // TODO: Need convert the config to a hex string
 				fs.readFile('data/config.dat', 'utf-8', function(error, data) {
 					if(error) {
@@ -131,7 +144,7 @@ module.exports = {
 			});
 
 			app.post("/config.dat", function(req, res) {
-        
+        delayPing = true;
 			});
 
 			app.get("/aps.json", function(req, res) {
@@ -149,8 +162,7 @@ module.exports = {
         if (!req.files) {
           return res.status(400).send('No files were uploaded.');
         }
-
-        res.send('File uploaded!');
+        delayPing = true; 
       });
 		}
 	}
