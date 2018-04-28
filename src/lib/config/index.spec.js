@@ -1,9 +1,10 @@
 import { decode, encode } from './index.js';
 
 describe("config", () => {
-  let ssid,
+  let deviceName,
+      ssid,
       passkey,
-      deviceName,
+      hostname,
       encryption,
       dhcp,
       staticIP,
@@ -12,9 +13,10 @@ describe("config", () => {
       staticSubnet;
 
   beforeEach(() => {
+    deviceName = null,
     ssid = null,
     passkey = null,
-    deviceName = null,
+    hostname = null,
     encryption = 0,
     dhcp = false,
     staticIP = null,
@@ -25,9 +27,10 @@ describe("config", () => {
 
   let toObj = function() {
     return {
+      deviceName,
       ssid,
       passkey,
-      deviceName,
+      hostname,
       encryption,
       dhcp,
       staticIP,
@@ -47,9 +50,9 @@ describe("config", () => {
   }
 
   describe("encode", () => {
-    describe("ssid", () => {
+    describe("deviceName", () => {
       describe("is set", () => {
-        beforeEach(() => { ssid = "Test" });
+        beforeEach(() => { deviceName = "Test" });
 
         it("encodes the length", () => {
           expect(valueAt(4)).to.eq(4);
@@ -64,9 +67,11 @@ describe("config", () => {
       });
     });
 
-    describe("passkey", () => {
+
+
+    describe("ssid", () => {
       describe("is set", () => {
-        beforeEach(() => { passkey = "Test" });
+        beforeEach(() => { ssid = "Test" });
 
         it("encodes the length", () => {
           expect(valueAt(6)).to.eq(4);
@@ -77,6 +82,23 @@ describe("config", () => {
           expect(charAt(10)).to.eq("e");
           expect(charAt(12)).to.eq("s");
           expect(charAt(14)).to.eq("t");
+        });
+      });
+    });
+
+    describe("passkey", () => {
+      describe("is set", () => {
+        beforeEach(() => { passkey = "Test" });
+
+        it("encodes the length", () => {
+          expect(valueAt(8)).to.eq(4);
+        });
+
+        it("encodes the string", () => {
+          expect(charAt(10)).to.eq("T");
+          expect(charAt(12)).to.eq("e");
+          expect(charAt(14)).to.eq("s");
+          expect(charAt(16)).to.eq("t");
         });
       });
     });
@@ -94,22 +116,23 @@ describe("config", () => {
       });
     });
 
-    describe("deviceName", () => {
+    describe("hostame", () => {
       describe("is set", () => {
-        beforeEach(() => { deviceName = "Test" });
+        beforeEach(() => { hostname = "test" });
 
         it("encodes the length", () => {
-          expect(valueAt(8)).to.eq(4);
+          expect(valueAt(10)).to.eq(4);
         });
 
         it("encodes the string", () => {
-          expect(charAt(10)).to.eq("T");
-          expect(charAt(12)).to.eq("e");
-          expect(charAt(14)).to.eq("s");
-          expect(charAt(16)).to.eq("t");
+          expect(charAt(12)).to.eq("t");
+          expect(charAt(14)).to.eq("e");
+          expect(charAt(16)).to.eq("s");
+          expect(charAt(18)).to.eq("t");
         });
       });
     });
+
 
     describe("dhcp", () => {
       describe("true", () => {
@@ -132,23 +155,6 @@ describe("config", () => {
         beforeEach(() => { staticIP = "Test" });
 
         it("encodes the length", () => {
-          expect(valueAt(10)).to.eq(4);
-        });
-
-        it("encodes the string", () => {
-          expect(charAt(12)).to.eq("T");
-          expect(charAt(14)).to.eq("e");
-          expect(charAt(16)).to.eq("s");
-          expect(charAt(18)).to.eq("t");
-        });
-      });
-    });
-
-    describe("staticDNS", () => {
-      describe("is set", () => {
-        beforeEach(() => { staticDNS = "Test" });
-
-        it("encodes the length", () => {
           expect(valueAt(12)).to.eq(4);
         });
 
@@ -161,9 +167,9 @@ describe("config", () => {
       });
     });
 
-    describe("staticGateway", () => {
+    describe("staticDNS", () => {
       describe("is set", () => {
-        beforeEach(() => { staticGateway = "Test" });
+        beforeEach(() => { staticDNS = "Test" });
 
         it("encodes the length", () => {
           expect(valueAt(14)).to.eq(4);
@@ -178,9 +184,9 @@ describe("config", () => {
       });
     });
 
-    describe("staticSubnet", () => {
+    describe("staticGateway", () => {
       describe("is set", () => {
-        beforeEach(() => { staticSubnet = "Test" });
+        beforeEach(() => { staticGateway = "Test" });
 
         it("encodes the length", () => {
           expect(valueAt(16)).to.eq(4);
@@ -194,10 +200,27 @@ describe("config", () => {
         });
       });
     });
+
+    describe("staticSubnet", () => {
+      describe("is set", () => {
+        beforeEach(() => { staticSubnet = "Test" });
+
+        it("encodes the length", () => {
+          expect(valueAt(18)).to.eq(4);
+        });
+
+        it("encodes the string", () => {
+          expect(charAt(20)).to.eq("T");
+          expect(charAt(22)).to.eq("e");
+          expect(charAt(24)).to.eq("s");
+          expect(charAt(26)).to.eq("t");
+        });
+      });
+    });
   });
 
   describe("decode", () => {
-    let data = "00dc08596f7572574946490b596f7572506173736b6579066761726167650c3139322e3136382e302e313007382e382e382e340b3139322e3136382e302e310d3235352e3235352e3235352e30"
+    let data = "00dc0546656c757808596f7572574946490b596f7572506173736b65790566656c75780c3139322e3136382e302e313007382e382e382e340b3139322e3136382e302e310d3235352e3235352e3235352e30"
     let decoded = null;
     beforeEach(() => { decoded = decode(data) });
 
@@ -213,6 +236,12 @@ describe("config", () => {
       });
     });
 
+    describe("deviceName", () => {
+      it("is decoded", () => {
+        expect(decoded.deviceName).to.eq("Felux");
+      });
+    });
+
     describe("ssid", () => {
       it("is decoded", () => {
         expect(decoded.ssid).to.eq("YourWIFI");
@@ -225,9 +254,9 @@ describe("config", () => {
       });
     });
 
-    describe("deviceName", () => {
+    describe("hostname", () => {
       it("is decoded", () => {
-        expect(decoded.deviceName).to.eq("garage");
+        expect(decoded.hostname).to.eq("felux");
       });
     });
 

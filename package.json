@@ -44,7 +44,7 @@
     "babel-register": "^6.24.1",
     "babel-runtime": "^6.23.0",
     "chai": "^3.5.0",
-    "configduino": "^1.0.1",
+    "configduino": "^1.1.0",
     "core-js": "^2.4.1",
     "cross-env": "^4.0.0",
     "css-loader": "^0.28.0",

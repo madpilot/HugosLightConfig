@@ -42,6 +42,14 @@ body {
   }
 }
 
+.panel {
+  composes: panel from 'configduino/modules/panel.css'
+}
+
+.heading {
+  composes: heading from 'configduino/modules/panel.css';
+}
+
 .form {
   composes: form from 'configduino/modules/form.css';
 }

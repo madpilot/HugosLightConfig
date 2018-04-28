@@ -2,10 +2,11 @@
 export const DEFAULTS = {
   encryption: '7',
   dhcp: true,
-  
+ 
+  deviceName: '',
   ssid: '',
   passkey: '',
-  deviceName: '',
+  hostname: '',
   staticIP: '',
   staticDNS: '',
   staticGateway: '',

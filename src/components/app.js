@@ -9,6 +9,9 @@ import WifiPanel from 'configduino/components/wifi-panel';
 import NetworkPanel from 'configduino/components/network-panel';
 import Button from 'configduino/components/button';
 
+import Input from 'configduino/components/input';
+import * as Validation from 'configduino/validation/validator.js';
+
 import Form from 'configduino/validation/form';
 import { cleanProps } from '../lib/utilities/index.js';
 
@@ -78,7 +81,7 @@ export default class App extends Component {
 
   saveConfig(e) {
     e.preventDefault();
-
+    console.log(this.state);
     let formData = new FormData();
     formData.append("config.dat", encode(this.state));
 
@@ -123,6 +126,10 @@ export default class App extends Component {
       this.setState({ tab: tab });
     });
   }
+  
+  changeDeviceName(e) {
+    this.setState({ deviceName: e.target.value });
+  }
 
   render() {
     return (
@@ -139,6 +146,21 @@ export default class App extends Component {
 
         <Tab name={TAB_SETTINGS} current={this.state.tab}>
           <Form class={styles.form} onSubmit={this.saveConfig.bind(this)}>
+            <section className={styles.panel}>
+              <h3 className={styles.heading}>Felux Settings</h3>
+              
+              <Input
+                label="Light Name"
+                type="text"
+                value={this.state.deviceName}
+                autocomplete="off"
+                autocapitalize="off"
+                onInput={this.changeDeviceName.bind(this)}
+                validators={[ Validation.required(), Validation.length(255) ]}
+                />
+
+            </section>
+
             <WifiPanel
               {...this.state}
               onUpdate={this.update.bind(this)}
